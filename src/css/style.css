@@ -1,0 +1,677 @@
+/* ADHD Kanban - Complete Stylesheet */
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    background-color: #f5f7fa;
+    min-height: 100vh;
+}
+
+/* ===========================================
+   Authentication Pages
+   =========================================== */
+
+.auth-container {
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+}
+
+.auth-card {
+    background: white;
+    border-radius: 12px;
+    padding: 40px;
+    width: 100%;
+    max-width: 400px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+}
+
+.auth-logo {
+    font-size: 64px;
+    text-align: center;
+    margin-bottom: 16px;
+}
+
+.auth-title {
+    font-size: 24px;
+    font-weight: bold;
+    text-align: center;
+    color: #2c3e50;
+    margin-bottom: 8px;
+}
+
+.auth-subtitle {
+    font-size: 14px;
+    color: #7f8c8d;
+    text-align: center;
+    margin-bottom: 32px;
+}
+
+.auth-error {
+    background: rgba(231, 76, 60, 0.1);
+    border: 1px solid rgba(231, 76, 60, 0.3);
+    border-radius: 8px;
+    padding: 12px;
+    margin-bottom: 20px;
+    color: #e74c3c;
+    font-size: 14px;
+    display: none;
+}
+
+.auth-error.show {
+    display: block;
+}
+
+.auth-form .form-group {
+    margin-bottom: 20px;
+}
+
+.auth-form label {
+    display: block;
+    margin-bottom: 8px;
+    color: #555;
+    font-weight: 500;
+    font-size: 14px;
+}
+
+.auth-form input {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    font-size: 16px;
+    font-family: inherit;
+    transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.auth-form input:focus {
+    outline: none;
+    border-color: #3498db;
+    box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.1);
+}
+
+.auth-submit {
+    width: 100%;
+    padding: 14px;
+    background: #3498db;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    font-size: 16px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+
+.auth-submit:hover:not(:disabled) {
+    background: #2980b9;
+}
+
+.auth-submit:disabled {
+    opacity: 0.7;
+    cursor: not-allowed;
+}
+
+.auth-switch {
+    text-align: center;
+    margin-top: 24px;
+    font-size: 14px;
+    color: #7f8c8d;
+}
+
+.auth-switch a {
+    color: #3498db;
+    text-decoration: none;
+    font-weight: 500;
+}
+
+.auth-switch a:hover {
+    text-decoration: underline;
+}
+
+/* ===========================================
+   Board Header
+   =========================================== */
+
+.header {
+    text-align: center;
+    padding: 20px;
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.header h1 {
+    color: #2c3e50;
+    font-size: 24px;
+}
+
+.header-right {
+    position: absolute;
+    top: 50%;
+    right: 20px;
+    transform: translateY(-50%);
+    display: flex;
+    align-items: center;
+    gap: 16px;
+}
+
+.column-settings {
+    display: flex;
+    align-items: center;
+}
+
+#add-column-btn {
+    background: transparent;
+    color: #95a5a6;
+    padding: 8px 12px;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    font-size: 14px;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+#add-column-btn:hover:not(:disabled) {
+    color: #27ae60;
+    border-color: #27ae60;
+    background: #eafaf1;
+}
+
+#add-column-btn:disabled {
+    color: #bdc3c7;
+    border-color: #ecf0f1;
+    cursor: not-allowed;
+    background: transparent;
+}
+
+.column-limit-msg {
+    font-size: 12px;
+    color: #e74c3c;
+    display: none;
+    margin-left: 10px;
+}
+
+.column-limit-msg.show {
+    display: inline;
+}
+
+/* User Menu */
+.user-menu {
+    position: relative;
+}
+
+.user-menu-btn {
+    background: transparent;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    padding: 8px 12px;
+    font-size: 14px;
+    cursor: pointer;
+    color: #555;
+    transition: all 0.2s;
+}
+
+.user-menu-btn:hover {
+    border-color: #3498db;
+    color: #3498db;
+}
+
+.user-dropdown {
+    position: absolute;
+    top: 100%;
+    right: 0;
+    margin-top: 4px;
+    background: white;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    display: none;
+    z-index: 100;
+}
+
+.user-dropdown.show {
+    display: block;
+}
+
+.user-dropdown button {
+    display: block;
+    width: 100%;
+    padding: 10px 20px;
+    background: none;
+    border: none;
+    font-size: 14px;
+    cursor: pointer;
+    text-align: left;
+    color: #555;
+}
+
+.user-dropdown button:hover {
+    background: #f5f7fa;
+    color: #e74c3c;
+}
+
+/* ===========================================
+   Floating Action Button
+   =========================================== */
+
+#add-task-btn {
+    position: fixed;
+    bottom: 30px;
+    right: 30px;
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    background: #3498db;
+    color: white;
+    border: none;
+    font-size: 30px;
+    cursor: pointer;
+    box-shadow: 0 4px 12px rgba(52, 152, 219, 0.4);
+    transition: all 0.3s;
+    z-index: 100;
+}
+
+#add-task-btn:hover {
+    background: #2980b9;
+    transform: scale(1.1);
+    box-shadow: 0 6px 16px rgba(52, 152, 219, 0.5);
+}
+
+/* ===========================================
+   Modals
+   =========================================== */
+
+.modal-overlay {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 1000;
+    justify-content: center;
+    align-items: center;
+}
+
+.modal-overlay.active {
+    display: flex;
+}
+
+.modal {
+    background: white;
+    border-radius: 12px;
+    padding: 30px;
+    max-width: 500px;
+    width: 90%;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+    animation: slideIn 0.3s ease-out;
+}
+
+@keyframes slideIn {
+    from {
+        transform: translateY(-50px);
+        opacity: 0;
+    }
+    to {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}
+
+.modal h2 {
+    margin-bottom: 20px;
+    color: #2c3e50;
+}
+
+.modal label {
+    display: block;
+    margin-bottom: 8px;
+    color: #555;
+    font-weight: 500;
+}
+
+.modal input,
+.modal textarea,
+.modal select {
+    width: 100%;
+    padding: 12px;
+    margin-bottom: 20px;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    font-size: 16px;
+    font-family: inherit;
+}
+
+.modal input:focus,
+.modal textarea:focus,
+.modal select:focus {
+    outline: none;
+    border-color: #3498db;
+    box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.1);
+}
+
+.modal textarea {
+    resize: vertical;
+    min-height: 100px;
+}
+
+.modal-buttons {
+    display: flex;
+    gap: 10px;
+    justify-content: flex-end;
+}
+
+.modal-buttons button {
+    padding: 12px 24px;
+    border: none;
+    border-radius: 6px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.btn-primary {
+    background: #3498db;
+    color: white;
+}
+
+.btn-primary:hover {
+    background: #2980b9;
+}
+
+.btn-secondary {
+    background: #ecf0f1;
+    color: #555;
+}
+
+.btn-secondary:hover {
+    background: #d5dbdb;
+}
+
+/* ===========================================
+   Loading and Error States
+   =========================================== */
+
+.loading-state,
+.error-state {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 400px;
+    color: #7f8c8d;
+}
+
+.loading-spinner {
+    width: 40px;
+    height: 40px;
+    border: 3px solid #ecf0f1;
+    border-top-color: #3498db;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+    margin-bottom: 16px;
+}
+
+@keyframes spin {
+    to { transform: rotate(360deg); }
+}
+
+.error-state {
+    color: #e74c3c;
+}
+
+.error-state button {
+    margin-top: 16px;
+}
+
+/* ===========================================
+   Kanban Board
+   =========================================== */
+
+.kanban-board {
+    display: flex;
+    flex-wrap: nowrap;
+    gap: 10px;
+    max-width: 100%;
+    margin: 0 auto;
+    padding: 0 20px 20px 20px;
+    min-height: 500px;
+}
+
+.column {
+    flex: 1 1 0;
+    min-width: 0;
+    background: white;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    min-height: 500px;
+    transition: box-shadow 0.2s;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+}
+
+.column:hover .column-controls {
+    opacity: 1;
+}
+
+.column.drag-over {
+    background-color: #e8f4f8;
+    box-shadow: 0 4px 12px rgba(52, 152, 219, 0.3);
+}
+
+.column.column-dragging {
+    opacity: 0.4;
+}
+
+.column.column-drag-over {
+    border-left: 4px solid #3498db;
+}
+
+/* Column Header */
+.column-header {
+    padding: 10px 12px;
+    font-weight: bold;
+    font-size: 14px;
+    border-bottom: 2px solid #3498db;
+    text-align: center;
+    color: #2c3e50;
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    flex-shrink: 0;
+}
+
+.drag-handle {
+    font-size: 12px;
+    color: #bdc3c7;
+    cursor: grab;
+    user-select: none;
+    opacity: 0.5;
+    transition: opacity 0.2s;
+    flex-shrink: 0;
+}
+
+.column:hover .drag-handle {
+    opacity: 1;
+    color: #95a5a6;
+}
+
+.drag-handle:hover {
+    color: #3498db;
+}
+
+.column-title {
+    flex: 1;
+    min-width: 0;
+    cursor: pointer;
+    padding: 4px 6px;
+    border-radius: 4px;
+    transition: background 0.2s;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.column-title:hover {
+    background: #ecf0f1;
+}
+
+.column-title-input {
+    flex: 1;
+    border: 2px solid #3498db;
+    padding: 4px 8px;
+    font-size: 14px;
+    font-weight: bold;
+    text-align: center;
+    font-family: inherit;
+    border-radius: 4px;
+}
+
+.column-controls {
+    position: absolute;
+    right: 4px;
+    top: 50%;
+    transform: translateY(-50%);
+    opacity: 0;
+    transition: opacity 0.2s;
+}
+
+.delete-column {
+    background: transparent;
+    color: #e74c3c;
+    border: none;
+    border-radius: 3px;
+    padding: 2px 4px;
+    cursor: pointer;
+    font-size: 14px;
+    transition: all 0.2s;
+}
+
+.delete-column:hover {
+    background: #e74c3c;
+    color: white;
+}
+
+/* Tasks Container */
+.tasks {
+    padding: 10px;
+    flex: 1;
+    overflow-y: auto;
+}
+
+/* Task Card */
+.task {
+    background: #f8f9fa;
+    border: 1px solid #e9ecef;
+    border-radius: 6px;
+    padding: 10px;
+    margin-bottom: 8px;
+    cursor: grab;
+    transition: all 0.2s;
+    user-select: none;
+    position: relative;
+}
+
+.task:hover .task-controls {
+    opacity: 1;
+}
+
+.task-controls {
+    position: absolute;
+    top: 6px;
+    right: 6px;
+    display: flex;
+    gap: 4px;
+    opacity: 0;
+    transition: all 0.2s;
+}
+
+.task-edit,
+.task-delete {
+    background: transparent;
+    border: none;
+    border-radius: 3px;
+    padding: 2px 5px;
+    cursor: pointer;
+    font-size: 12px;
+    transition: all 0.2s;
+}
+
+.task-edit {
+    color: #95a5a6;
+}
+
+.task-edit:hover {
+    background: #3498db;
+    color: white;
+}
+
+.task-delete {
+    color: #e74c3c;
+}
+
+.task-delete:hover {
+    background: #e74c3c;
+    color: white;
+}
+
+.task:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+}
+
+.task.dragging {
+    opacity: 0.5;
+    transform: rotate(3deg);
+    cursor: grabbing;
+}
+
+.task.drag-over-task {
+    border-top: 3px solid #3498db;
+}
+
+.task-title {
+    font-weight: bold;
+    margin-bottom: 6px;
+    color: #2c3e50;
+    font-size: 13px;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+    padding-right: 45px;
+}
+
+.task-description {
+    color: #7f8c8d;
+    font-size: 12px;
+    line-height: 1.4;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+}
+
+.task-meta {
+    font-size: 10px;
+    color: #95a5a6;
+    margin-top: 6px;
+}
+
+.empty-column {
+    text-align: center;
+    color: #bdc3c7;
+    font-size: 12px;
+    font-style: italic;
+    margin-top: 50px;
+    padding: 0 5px;
+}

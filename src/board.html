@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ADHD Kanban Organizer</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <div class="header">
+        <h1 id="page-title">🧠 ADHD Kanban Organizer</h1>
+        <div class="header-right">
+            <div class="column-settings">
+                <button id="add-column-btn" title="Add new column">+ Column</button>
+                <span class="column-limit-msg" id="column-limit-msg">Max 12</span>
+            </div>
+            <div class="user-menu">
+                <button id="user-menu-btn" class="user-menu-btn">
+                    <span id="username-display">User</span> ▾
+                </button>
+                <div id="user-dropdown" class="user-dropdown">
+                    <button id="logout-btn">Logout</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Floating Add Task Button -->
+    <button id="add-task-btn" aria-label="Add new task">+</button>
+    
+    <!-- Modal for Adding Tasks -->
+    <div class="modal-overlay" id="task-modal">
+        <div class="modal">
+            <h2>Add New Task</h2>
+            <form id="add-task-form">
+                <label for="task-title">Title *</label>
+                <input id="task-title" type="text" name="title" placeholder="What needs to be done?" required aria-required="true">
+                
+                <label for="task-description">Description</label>
+                <textarea id="task-description" name="description" placeholder="Additional details (optional)" rows="3"></textarea>
+                
+                <label for="task-column">Column</label>
+                <select id="task-column" name="column_id"></select>
+                
+                <div class="modal-buttons">
+                    <button type="button" class="btn-secondary" id="cancel-task-btn">Cancel</button>
+                    <button type="submit" class="btn-primary">Add Task</button>
+                </div>
+            </form>
+        </div>
+    </div>
+    
+    <!-- Modal for Adding Column -->
+    <div class="modal-overlay" id="column-modal">
+        <div class="modal">
+            <h2>Add New Column</h2>
+            <form id="add-column-form">
+                <label for="column-name">Column Name *</label>
+                <input id="column-name" type="text" name="name" placeholder="e.g., Blocked, Review" required aria-required="true">
+                
+                <div class="modal-buttons">
+                    <button type="button" class="btn-secondary" id="cancel-column-btn">Cancel</button>
+                    <button type="submit" class="btn-primary">Add Column</button>
+                </div>
+            </form>
+        </div>
+    </div>
+    
+    <!-- Modal for Editing Task -->
+    <div class="modal-overlay" id="edit-task-modal">
+        <div class="modal">
+            <h2>Edit Task</h2>
+            <form id="edit-task-form">
+                <input type="hidden" id="edit-task-id" value="">
+                
+                <label for="edit-task-title">Title *</label>
+                <input id="edit-task-title" type="text" name="title" placeholder="What needs to be done?" required aria-required="true">
+                
+                <label for="edit-task-description">Description</label>
+                <textarea id="edit-task-description" name="description" placeholder="Additional details (optional)" rows="3"></textarea>
+                
+                <div class="modal-buttons">
+                    <button type="button" class="btn-secondary" id="cancel-edit-btn">Cancel</button>
+                    <button type="submit" class="btn-primary">Save Changes</button>
+                </div>
+            </form>
+        </div>
+    </div>
+    
+    <!-- Loading State -->
+    <div id="loading-state" class="loading-state">
+        <div class="loading-spinner"></div>
+        <p>Loading your board...</p>
+    </div>
+    
+    <!-- Error State -->
+    <div id="error-state" class="error-state" style="display: none;">
+        <p id="error-message">Failed to load board</p>
+        <button id="retry-btn" class="btn-primary">Retry</button>
+    </div>
+    
+    <!-- Kanban Board -->
+    <div class="kanban-board" id="kanban-board" style="display: none;"></div>
+
+    <script src="js/api.js"></script>
+    <script src="js/board.js"></script>
+</body>
+</html>

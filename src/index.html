@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ADHD Kanban - Login</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <div class="auth-container">
+        <!-- Login Form -->
+        <div id="login-card" class="auth-card">
+            <div class="auth-logo">🧠</div>
+            <h1 class="auth-title">ADHD Kanban</h1>
+            <p class="auth-subtitle">Sign in to continue</p>
+            
+            <div id="login-error" class="auth-error"></div>
+            
+            <form id="login-form" class="auth-form">
+                <div class="form-group">
+                    <label for="login-username">Username</label>
+                    <input type="text" id="login-username" name="username" required autocomplete="username">
+                </div>
+                
+                <div class="form-group">
+                    <label for="login-password">Password</label>
+                    <input type="password" id="login-password" name="password" required autocomplete="current-password">
+                </div>
+                
+                <button type="submit" class="auth-submit" id="login-submit">Sign In</button>
+            </form>
+            
+            <p class="auth-switch">
+                Don't have an account? <a href="#" id="show-register">Sign Up</a>
+            </p>
+        </div>
+        
+        <!-- Register Form (hidden by default) -->
+        <div id="register-card" class="auth-card" style="display: none;">
+            <div class="auth-logo">🧠</div>
+            <h1 class="auth-title">Create Account</h1>
+            <p class="auth-subtitle">Sign up to get started</p>
+            
+            <div id="register-error" class="auth-error"></div>
+            
+            <form id="register-form" class="auth-form">
+                <div class="form-group">
+                    <label for="register-username">Username</label>
+                    <input type="text" id="register-username" name="username" required minlength="3" autocomplete="username">
+                </div>
+                
+                <div class="form-group">
+                    <label for="register-email">Email (optional)</label>
+                    <input type="email" id="register-email" name="email" autocomplete="email">
+                </div>
+                
+                <div class="form-group">
+                    <label for="register-password">Password</label>
+                    <input type="password" id="register-password" name="password" required minlength="8" autocomplete="new-password">
+                </div>
+                
+                <div class="form-group">
+                    <label for="register-password-confirm">Confirm Password</label>
+                    <input type="password" id="register-password-confirm" name="password_confirm" required minlength="8" autocomplete="new-password">
+                </div>
+                
+                <button type="submit" class="auth-submit" id="register-submit">Create Account</button>
+            </form>
+            
+            <p class="auth-switch">
+                Already have an account? <a href="#" id="show-login">Sign In</a>
+            </p>
+        </div>
+    </div>
+    
+    <script src="js/api.js"></script>
+    <script>
+        // Check if already authenticated
+        if (isAuthenticated()) {
+            window.location.href = 'board.html';
+        }
+        
+        // DOM elements
+        const loginCard = document.getElementById('login-card');
+        const registerCard = document.getElementById('register-card');
+        const loginForm = document.getElementById('login-form');
+        const registerForm = document.getElementById('register-form');
+        const loginError = document.getElementById('login-error');
+        const registerError = document.getElementById('register-error');
+        const loginSubmit = document.getElementById('login-submit');
+        const registerSubmit = document.getElementById('register-submit');
+        
+        // Toggle between login and register
+        document.getElementById('show-register').addEventListener('click', (e) => {
+            e.preventDefault();
+            loginCard.style.display = 'none';
+            registerCard.style.display = 'block';
+            loginError.classList.remove('show');
+            registerError.classList.remove('show');
+        });
+        
+        document.getElementById('show-login').addEventListener('click', (e) => {
+            e.preventDefault();
+            registerCard.style.display = 'none';
+            loginCard.style.display = 'block';
+            loginError.classList.remove('show');
+            registerError.classList.remove('show');
+        });
+        
+        // Login form submission
+        loginForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const username = document.getElementById('login-username').value.trim();
+            const password = document.getElementById('login-password').value;
+            
+            loginError.classList.remove('show');
+            loginSubmit.disabled = true;
+            loginSubmit.textContent = 'Signing in...';
+            
+            try {
+                await api.login(username, password);
+                window.location.href = 'board.html';
+            } catch (error) {
+                loginError.textContent = error.message || 'Login failed';
+                loginError.classList.add('show');
+            } finally {
+                loginSubmit.disabled = false;
+                loginSubmit.textContent = 'Sign In';
+            }
+        });
+        
+        // Register form submission
+        registerForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const username = document.getElementById('register-username').value.trim();
+            const email = document.getElementById('register-email').value.trim();
+            const password = document.getElementById('register-password').value;
+            const passwordConfirm = document.getElementById('register-password-confirm').value;
+            
+            // Validate passwords match
+            if (password !== passwordConfirm) {
+                registerError.textContent = 'Passwords do not match';
+                registerError.classList.add('show');
+                return;
+            }
+            
+            registerError.classList.remove('show');
+            registerSubmit.disabled = true;
+            registerSubmit.textContent = 'Creating account...';
+            
+            try {
+                await api.register(username, password, email || null);
+                window.location.href = 'board.html';
+            } catch (error) {
+                registerError.textContent = error.message || 'Registration failed';
+                registerError.classList.add('show');
+            } finally {
+                registerSubmit.disabled = false;
+                registerSubmit.textContent = 'Create Account';
+            }
+        });
+    </script>
+</body>
+</html>
