@@ -40,7 +40,9 @@
                 <textarea id="task-description" name="description" placeholder="Additional details (optional)" rows="3"></textarea>
                 
                 <label for="task-column">Column</label>
-                <select id="task-column" name="column_id"></select>
+                <select id="task-column" name="column" required>
+                    <!-- Populated dynamically -->
+                </select>
                 
                 <div class="modal-buttons">
                     <button type="button" class="btn-secondary" id="cancel-task-btn">Cancel</button>
@@ -50,13 +52,13 @@
         </div>
     </div>
     
-    <!-- Modal for Adding Column -->
+    <!-- Modal for Adding Columns -->
     <div class="modal-overlay" id="column-modal">
         <div class="modal">
             <h2>Add New Column</h2>
             <form id="add-column-form">
                 <label for="column-name">Column Name *</label>
-                <input id="column-name" type="text" name="name" placeholder="e.g., Blocked, Review" required aria-required="true">
+                <input id="column-name" type="text" name="name" placeholder="e.g., In Review" required aria-required="true">
                 
                 <div class="modal-buttons">
                     <button type="button" class="btn-secondary" id="cancel-column-btn">Cancel</button>
@@ -66,12 +68,12 @@
         </div>
     </div>
     
-    <!-- Modal for Editing Task -->
+    <!-- Modal for Editing Tasks -->
     <div class="modal-overlay" id="edit-task-modal">
         <div class="modal">
             <h2>Edit Task</h2>
             <form id="edit-task-form">
-                <input type="hidden" id="edit-task-id" value="">
+                <input type="hidden" id="edit-task-id">
                 
                 <label for="edit-task-title">Title *</label>
                 <input id="edit-task-title" type="text" name="title" placeholder="What needs to be done?" required aria-required="true">
@@ -102,7 +104,6 @@
     <!-- Kanban Board -->
     <div class="kanban-board" id="kanban-board" style="display: none;"></div>
 
-    <script src="js/api.js"></script>
-    <script src="js/board.js"></script>
+    <script type="module" src="js/board.js"></script>
 </body>
 </html>

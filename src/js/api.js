@@ -1,6 +1,8 @@
 /**
  * API Client for ADHD Kanban
  * Handles all communication with the Django REST API
+ * 
+ * Works as both ES module (for tests) and browser global
  */
 
 const CONFIG = {
@@ -40,15 +42,23 @@ async function apiRequest(endpoint, options = {}) {
         headers['Authorization'] = `Token ${token}`;
     }
     
-    const response = await fetch(url, {
-        ...options,
-        headers,
-    });
+    let response;
+    try {
+        response = await fetch(url, {
+            ...options,
+            headers,
+        });
+    } catch (error) {
+        // Handle network errors
+        throw new Error('Network error: Unable to connect to server');
+    }
     
     // Handle 401 - redirect to login
     if (response.status === 401) {
         clearToken();
-        window.location.href = 'index.html';
+        if (typeof window !== 'undefined' && window.location) {
+            window.location.href = 'index.html';
+        }
         throw new Error('Session expired');
     }
     
@@ -57,21 +67,45 @@ async function apiRequest(endpoint, options = {}) {
         return null;
     }
     
-    const data = await response.json();
+    // Parse JSON response, handling potential parsing errors
+    let data;
+    try {
+        // Check content-type if headers are available
+        const contentType = response.headers?.get('content-type');
+        if (contentType && contentType.includes('application/json')) {
+            data = await response.json();
+        } else if (contentType) {
+            // Response is not JSON, try to get text for error message
+            const text = await response.text();
+            throw new Error(text || `Server returned ${response.status} ${response.statusText}`);
+        } else {
+            // No content-type header, try to parse as JSON (for test mocks)
+            data = await response.json();
+        }
+    } catch (error) {
+        // If JSON parsing fails or response is not JSON
+        if (error instanceof SyntaxError) {
+            throw new Error(`Invalid response from server: ${response.status} ${response.statusText}`);
+        }
+        // Re-throw if it's already an Error we created
+        throw error;
+    }
     
     if (!response.ok) {
         // Extract error message from response
         let message = 'Request failed';
-        if (data.error) {
-            message = data.error;
-        } else if (data.detail) {
-            message = data.detail;
-        } else if (data.username) {
-            message = data.username[0];
-        } else if (data.password) {
-            message = data.password[0];
-        } else if (data.non_field_errors) {
-            message = data.non_field_errors[0];
+        if (data && typeof data === 'object') {
+            if (data.error) {
+                message = data.error;
+            } else if (data.detail) {
+                message = data.detail;
+            } else if (data.username) {
+                message = Array.isArray(data.username) ? data.username[0] : data.username;
+            } else if (data.password) {
+                message = Array.isArray(data.password) ? data.password[0] : data.password;
+            } else if (data.non_field_errors) {
+                message = Array.isArray(data.non_field_errors) ? data.non_field_errors[0] : data.non_field_errors;
+            }
         }
         throw new Error(message);
     }
@@ -111,6 +145,8 @@ const api = {
     async logout() {
         try {
             await apiRequest('/auth/logout/', { method: 'POST' });
+        } catch (e) {
+            // Ignore errors - we're logging out anyway
         } finally {
             clearToken();
         }
@@ -192,3 +228,8 @@ const api = {
         });
     },
 };
+
+// Export for testing - these exports work when imported as ES module
+// In browser, these are ignored and globals are used instead
+export { CONFIG, getToken, setToken, clearToken, isAuthenticated, apiRequest, api };
+export default api;
